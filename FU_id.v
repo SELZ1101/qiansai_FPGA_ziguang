@@ -1,0 +1,35 @@
+`timescale 1ps/1ps
+//对ID前推可以认为EX阶段的是EX/MEM寄存器中的下一个数据，
+module fu_alu
+(
+    input [5:0] id_rs1,
+    input [5:0] id_rs2,
+    input [5:0] ex_rd, 
+    input [5:0] ex_mem_rd,
+    input [5:0] mem_wb_rd,
+    input  ex_rd_reg_write,
+    input  ex_mem_reg_write,
+    input  mem_wb_reg_write,
+
+    output reg [1:0] id_forward_a,
+    output reg [1:0] id_forward_b
+);
+
+always@(*)begin//if和else必须在always块中
+    if((id_rs1 == ex_rd)&&(id_rs1 != 5'b0)&& ex_rd_reg_write)
+        id_forward_a = 2'b00;
+    else if((id_rs1 == ex_mem_rd)&&(id_rs1 != 5'b0)&&ex_mem_red_write)
+        id_forward_a = 2'b01;
+    else if((id_rs1 == ex_wb_rd)&&(alu_rs1 != 5'b0)&&mem_wb_reg_write)
+        id_forward_a = 2'b10;
+    else id_forward_a = 2'b00;
+
+    if((id_rs2 == ex_rd)&&(id_rs2 != 5'b0)&& ex_rd_reg_write)
+        id_forward_b = 2'b00;
+    else if((id_rs2 == ex_mem_rd)&&(id_rs2 != 5'b0)&&ex_mem_reg_write)
+        id_forward_b = 2'b01;
+    else if((id_rs2 == ex_wb_rd)&&(alu_rs2 != 5'b0)&&mem_wb_reg_write)
+        id_forward_b = 2'b10;
+    else id_forward_b = 2'b00;
+end
+endmodule

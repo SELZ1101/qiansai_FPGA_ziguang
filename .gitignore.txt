@@ -1,0 +1,9 @@
+*.jou
+*.log
+*.pb
+*.wdb
+*.vcd
+*.fsdb
+.Xil/
+# 排除 Vivado 自动生成的工程目录，通常只保留代码和约束文件
+project_*/
