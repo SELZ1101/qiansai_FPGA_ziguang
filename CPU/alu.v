@@ -9,10 +9,10 @@ module alu
     input [31:0] a_data,//选择a,b输入的任务交给了外部电路
     input [31:0] b_data,
 
-    output reg [31:0] rd_data,
+    output reg [31:0] rd_data
 );
 
-    wire is_sub = (alu_op == 1000)||(alu_op == 0010)||(alu_op == 0011)
+    wire is_sub = (alu_op == 4'b1000)||(alu_op == 4'b0010)||(alu_op == 4'b0011);
 
     wire [31:0] b = is_sub?~b_data:b_data;//取反32位全取，原码变补码是只变后31位
     wire [32:0] add_res = {1'b0, a_data} + {1'b0, b} + is_sub;//复用一下

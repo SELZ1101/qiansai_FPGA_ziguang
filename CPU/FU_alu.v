@@ -2,10 +2,10 @@
 //对ID前推可以认为EX阶段的是EX/MEM寄存器中的下一个数据，
 module fu_alu
 (
-    input [5:0] alu_rs1,
-    input [5:0] alu_rs2, 
-    input [5:0] ex_mem_rd,
-    input [5:0] mem_wb_rd
+    input [4:0] alu_rs1,
+    input [4:0] alu_rs2, 
+    input [4:0] ex_mem_rd,
+    input [4:0] mem_wb_rd,
     input  ex_mem_reg_write,
     input  mem_wb_reg_write,
 

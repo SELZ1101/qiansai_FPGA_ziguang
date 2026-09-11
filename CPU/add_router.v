@@ -13,5 +13,5 @@ module add_router
     input  wire [31:0] cpu_wdata_i,  // 写数据
     
     output reg  [31:0] cpu_rdata_o,  // 返回给 CPU 的读数据
-    output reg         cpu_rvalid_o, // 读数据有效信号响应
+    output reg         cpu_rvalid_o // 读数据有效信号响应
 )

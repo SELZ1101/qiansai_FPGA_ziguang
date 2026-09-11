@@ -15,8 +15,8 @@ module main_control(
 );
 
     wire [9:0] controls;
-    assign {Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite} = controls;
-    
+    assign {Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite,is_jump} = controls;
+   
     reg [9:0] ctrl_reg;
     assign controls = ctrl_reg;
 
@@ -32,7 +32,7 @@ module main_control(
             7'b1100111: ctrl_reg = 10'b0_0_10_00_0_1_1_1;//jalr,是rs1+imm
             7'b0110111: ctrl_reg = 10'b0_0_00_00_0_1_1_0;//lui,默认加
             7'b0010111: ctrl_reg = 10'b0_0_00_00_0_1_1_0;//auipc,也是往RF写，默认加
-            default:    ctrl_reg = 10'b0_0_0_00_0_0_0_0_0;
+            default:    ctrl_reg = 10'b0_0_00_00_0_0_0_0;
         endcase
     end
 endmodule
