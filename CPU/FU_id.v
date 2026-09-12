@@ -15,20 +15,16 @@ module fu_id
     output reg [1:0] id_forward_b
 );
 
-always@(*)begin//if和else必须在always块中
+always@(*)begin//if和else必须在always块中,写回阶段前推直接在rf内部完成了。
     if((id_rs1 == ex_rd)&&(id_rs1 != 5'b0)&& ex_rd_reg_write)
-        id_forward_a = 2'b00;
-    else if((id_rs1 == ex_mem_rd)&&(id_rs1 != 5'b0)&&ex_mem_reg_write)
         id_forward_a = 2'b01;
-    else if((id_rs1 == mem_wb_rd)&&(id_rs1 != 5'b0)&&mem_wb_reg_write)
+    else if((id_rs1 == ex_mem_rd)&&(id_rs1 != 5'b0)&&ex_mem_reg_write)
         id_forward_a = 2'b10;
     else id_forward_a = 2'b00;
 
     if((id_rs2 == ex_rd)&&(id_rs2 != 5'b0)&& ex_rd_reg_write)
-        id_forward_b = 2'b00;
-    else if((id_rs2 == ex_mem_rd)&&(id_rs2 != 5'b0)&&ex_mem_reg_write)
         id_forward_b = 2'b01;
-    else if((id_rs2 == mem_wb_rd)&&(id_rs2 != 5'b0)&&mem_wb_reg_write)
+    else if((id_rs2 == ex_mem_rd)&&(id_rs2 != 5'b0)&&ex_mem_reg_write)
         id_forward_b = 2'b10;
     else id_forward_b = 2'b00;
 end

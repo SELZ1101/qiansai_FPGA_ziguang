@@ -38,8 +38,9 @@ module tb_cpu_top();
         .data_rvalid_i  (data_rvalid_i)
     );
 
-    // 模拟存储器 (1K 空间，按字寻址)
-    reg [31:0] imem [0:255];
+    // 模拟存储器 (4K 空间，按字寻址，深度为1024)
+    // 【修改】将 imem 的容量扩大为 1024，解决 inst_addr_o[11:2] 带来的越界隐患
+    reg [31:0] imem [0:1023];
     reg [31:0] dmem [0:1023];
 
     // 载入机器码
@@ -57,8 +58,7 @@ module tb_cpu_top();
     // 仿真流程控制
     initial begin
         rst_n = 0;
-        inst_rvalid_i = 0;
-        data_rvalid_i = 0;
+        // initial块中不再需要给 valid 赋初值，因为复位逻辑已处理
         #20;
         rst_n = 1; // 释放复位
         
@@ -66,9 +66,13 @@ module tb_cpu_top();
         $finish;
     end
 
-    // 模拟 Router/Cache (单周期响应)
+    // 模拟取指 Router/Cache (单周期响应)
     always @(posedge clk) begin
-        if (inst_req_o) begin
+        // 【修改】增加复位逻辑判断
+        if (!rst_n) begin
+            inst_rvalid_i <= 1'b0;
+            inst_rdata_i  <= 32'b0;
+        end else if (inst_req_o) begin
             // 按字寻址需右移 2 位
             inst_rdata_i <= imem[inst_addr_o[11:2]]; 
             inst_rvalid_i <= 1'b1;
@@ -77,8 +81,13 @@ module tb_cpu_top();
         end
     end
 
+    // 模拟访存 Router/Cache (单周期响应)
     always @(posedge clk) begin
-        if (data_req_o) begin
+        // 【修改】增加复位逻辑判断
+        if (!rst_n) begin
+            data_rvalid_i <= 1'b0;
+            data_rdata_i  <= 32'b0;
+        end else if (data_req_o) begin
             if (data_we_o) begin
                 // 简化仿真，假设这里是整字对齐写入，暂未处理 wmask
                 dmem[data_addr_o[11:2]] <= data_wdata_o;
